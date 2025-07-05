@@ -23,7 +23,7 @@ class TransaksiController extends Controller
      */
     public function create()
     {
-        //
+        return view('transaksi.create');
     }
 
     /**
@@ -31,7 +31,20 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tipe' => 'required|in:pemasukan,pengeluaran',
+            'deskripsi' => 'required|string|max:255',
+            'jumlah' => 'required|numeric|min:0',
+        ]);
+
+        Transaksi::create([
+            'user_id' => Auth::id(),
+            'tipe' => $request->tipe,
+            'deskripsi' => $request->deskripsi,
+            'jumlah' => $request->jumlah,
+        ]);
+
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil ditambahkan.');
     }
 
     /**
