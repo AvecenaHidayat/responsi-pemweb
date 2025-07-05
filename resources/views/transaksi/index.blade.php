@@ -8,8 +8,8 @@
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <a href="{{ route('transaksi.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">+ Tambah Transaksi</a>
 
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <table class="min-w-full table-auto">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr class="bg-gray-100 text-left">
                         <th class="px-4 py-2">Tanggal</th>

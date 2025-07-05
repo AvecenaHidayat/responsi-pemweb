@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransaksiController;
+use App\Models\Transaksi;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +22,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    $totalPemasukan = Transaksi::where('user_id', auth()->id())->where('tipe', 'pemasukan')->sum('jumlah');
+    $totalPengeluaran = Transaksi::where('user_id', auth()->id())->where('tipe', 'pengeluaran')->sum('jumlah');
+
+    return view('dashboard', compact('totalPemasukan', 'totalPengeluaran'));
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
