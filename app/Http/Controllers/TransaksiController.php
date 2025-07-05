@@ -58,24 +58,37 @@ class TransaksiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Transaksi $transaksi)
+    public function edit($id)
     {
-        //
+        $transaksi = Transaksi::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        return view('transaksi.edit', compact('transaksi'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaksi $transaksi)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'tipe' => 'required|in:pemasukan,pengeluaran',
+            'deskripsi' => 'required|string|max:255',
+            'jumlah' => 'required|numeric|min:0',
+        ]);
+
+        $transaksi = Transaksi::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $transaksi->update($request->only('tipe', 'deskripsi', 'jumlah'));
+
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaksi $transaksi)
+    public function destroy($id)
     {
-        //
+        $transaksi = Transaksi::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $transaksi->delete();
+
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
     }
 }
